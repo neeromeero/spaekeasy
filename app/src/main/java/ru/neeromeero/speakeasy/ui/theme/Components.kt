@@ -17,12 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TextInput(language: String, text: String, onTextChenge: (String) -> Unit, onClearText: () -> Unit){
-    Column {
+fun TextInput(language: String, text: String, onTextChange: (String) -> Unit, onClearText: () -> Unit, modifier: Modifier = Modifier){
+    Column(modifier = modifier) {
         Text(text = language)
         OutlinedTextField(
             value = text,
-            onValueChange = onTextChenge,
+            onValueChange = onTextChange,
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Enter text here...") },
             trailingIcon = {
@@ -35,8 +35,8 @@ fun TextInput(language: String, text: String, onTextChenge: (String) -> Unit, on
 }
 
 @Composable
-fun TranslateButton(onTranslate: () -> Unit) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+fun TranslateButton(onTranslate: () -> Unit, modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxWidth()) {
         Button(
             onClick = onTranslate,
             modifier = Modifier
@@ -49,11 +49,16 @@ fun TranslateButton(onTranslate: () -> Unit) {
 }
 
 @Composable
-fun TranslationResult(result: String) {
+fun TranslationResult(result: String, modifier: Modifier = Modifier) {
     OutlinedTextField(
         value = result,
         onValueChange = {},
         readOnly = true,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     )
+}
+
+@Composable
+fun LanguageSelector(sourceLanguage: String, targetLanguage: String, onSwapLanguages: () -> Unit) {
+    //TODO добавить реализацию селектора языков
 }

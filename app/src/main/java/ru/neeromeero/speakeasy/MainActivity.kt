@@ -25,7 +25,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.neeromeero.speakeasy.screen.TranslationScreen
+import ru.neeromeero.speakeasy.screen.history.HistoryScreen
+import ru.neeromeero.speakeasy.screen.translation.TranslationScreen
 import ru.neeromeero.speakeasy.ui.theme.SpeakEasyTheme
 
 @AndroidEntryPoint
@@ -52,31 +53,36 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 startDestination = "translate"
             ) {
-                composable("chat") {}
-                composable("camera") {}
+                //composable("chat") {}
+                //composable("camera") {}
                 composable("translate"){ TranslationScreen() }
-                composable("history") {}
-                composable("favorite") {}
+                composable("history") { HistoryScreen() }
+                //composable("favorite") {}
             }
         }
     }
 
-    private val Destinations = listOf("chat", "camera", "translate", "history", "favorite")
+    //private val Destinations = listOf("chat", "camera", "translate", "history", "favorite")
+    private val destinations = listOf("translate", "history",)
 
     @Composable
     fun BottomNavigationBar(navController: NavController) {
         var selectedItem by rememberSaveable { mutableIntStateOf(2) }
-        val icons = listOf(
+/*        val icons = listOf(
             ImageVector.vectorResource(R.drawable.ic_chat),
             ImageVector.vectorResource(R.drawable.ic_camera),
             ImageVector.vectorResource(R.drawable.ic_translate),
             ImageVector.vectorResource(R.drawable.ic_history),
             ImageVector.vectorResource(R.drawable.ic_fav),
         )
-
+*/
+        val icons = listOf(
+            ImageVector.vectorResource(R.drawable.ic_translate),
+            ImageVector.vectorResource(R.drawable.ic_history),
+        )
         NavigationBar(
             content = {
-                Destinations.forEachIndexed { index, item ->
+                destinations.forEachIndexed { index, item ->
                     BottomNavigationItem(
                         icon = {
                             Icon(

@@ -5,10 +5,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
+import kotlinx.serialization.json.Json
 import okhttp3.Call
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import ru.neeromeero.speakeasy.BuildConfig
 import ru.neeromeero.speakeasy.core.TranslationApi
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -16,9 +22,33 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpCallFactory: Lazy<Call.Factory>): Retrofit {
+    fun provideJson(): Json {
+        return Json {
+            ignoreUnknownKeys = true
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun okHttp(): Call.Factory {
+        return OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    if (BuildConfig.DEBUG) {
+                        setLevel(HttpLoggingInterceptor.Level.BODY)
+                    }
+                }
+            )
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(json: Json, okHttp: Lazy<Call.Factory>): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.github.com")
+            .baseUrl("https://ftapi.pythonanywhere.com/")
+            .callFactory {okHttp.get().newCall(it)}
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
 

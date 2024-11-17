@@ -1,4 +1,4 @@
-package ru.neeromeero.speakeasy.screen
+package ru.neeromeero.speakeasy.screen.translation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,30 +19,41 @@ import ru.neeromeero.speakeasy.ui.theme.TranslationResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TranslationScreen(viewModel: TranslationViewModel = hiltViewModel()
+fun TranslationScreen(
+    viewModel: TranslationViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
     ) {
-        TopAppBar(title = { Text("")})
+        TopAppBar(
+            title = { Text("")},
+        )
 
         TextInput(
             language = uiState.value.sourceLang,
             text = uiState.value.inputText,
-            onTextChenge = {viewModel.updateInputText(it)},
-            onClearText = {viewModel.clearInputText()}
+            onTextChange = {viewModel.updateInputText(it)},
+            onClearText = {viewModel.clearInputText()},
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
 
         Spacer(Modifier.height(16.dp))
 
-        TranslateButton(onTranslate = {viewModel.translateText()})
+        TranslateButton(
+            onTranslate = {viewModel.translateText()},
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+
+        Spacer(Modifier.height(16.dp))
 
         uiState.value.translatedText?.let {
-            TranslationResult(it)
+            TranslationResult(
+                result = it,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
         }
     }
 }
